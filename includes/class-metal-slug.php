@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * The file that defines the core plugin class
  *
@@ -27,7 +28,8 @@
  * @subpackage Metal_Slug/includes
  * @author     JCVD <yolo@bisous.org>
  */
-class Metal_Slug {
+class Metal_Slug
+{
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -66,8 +68,11 @@ class Metal_Slug {
 	 *
 	 * @since    1.0.0
 	 */
-	public function __construct() {
-		if ( defined( 'METAL_SLUG_VERSION' ) ) {
+
+
+	public function __construct()
+	{
+		if (defined('METAL_SLUG_VERSION')) {
 			$this->version = METAL_SLUG_VERSION;
 		} else {
 			$this->version = '1.0.0';
@@ -78,7 +83,6 @@ class Metal_Slug {
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
-
 	}
 
 	/**
@@ -97,33 +101,33 @@ class Metal_Slug {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function load_dependencies() {
+	private function load_dependencies()
+	{
 
 		/**
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-metal-slug-loader.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-metal-slug-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-metal-slug-i18n.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-metal-slug-i18n.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-metal-slug-admin.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-metal-slug-admin.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-metal-slug-public.php';
+		require_once plugin_dir_path(dirname(__FILE__)) . 'public/class-metal-slug-public.php';
 
 		$this->loader = new Metal_Slug_Loader();
-
 	}
 
 	/**
@@ -135,12 +139,12 @@ class Metal_Slug {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function set_locale() {
+	private function set_locale()
+	{
 
 		$plugin_i18n = new Metal_Slug_i18n();
 
-		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
-
+		$this->loader->add_action('plugins_loaded', $plugin_i18n, 'load_plugin_textdomain');
 	}
 
 	/**
@@ -150,14 +154,23 @@ class Metal_Slug {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function define_admin_hooks() {
+	private function define_admin_hooks()
+	{
 
-		$plugin_admin = new Metal_Slug_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new Metal_Slug_Admin($this->get_plugin_name(), $this->get_version());
+		$this->loader->add_action('admin_init', $plugin_admin, 'process_ajouter_evenement');
 
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
+		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
+
+		$this->loader->add_action('admin_menu', $plugin_admin, 'add_admin_menu');
+		// $this->loader->add_action( 'admin_menu', $plugin_admin, 'ms_admin_display_setting_pages' );
+
+		$this->loader->add_action('admin_post_add_event', $plugin_admin, 'process_ajouter_evenement');
 	}
+
+
 
 	/**
 	 * Register all of the hooks related to the public-facing functionality
@@ -166,13 +179,13 @@ class Metal_Slug {
 	 * @since    1.0.0
 	 * @access   private
 	 */
-	private function define_public_hooks() {
+	private function define_public_hooks()
+	{
 
-		$plugin_public = new Metal_Slug_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new Metal_Slug_Public($this->get_plugin_name(), $this->get_version());
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
-
+		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
+		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
 	}
 
 	/**
@@ -180,7 +193,8 @@ class Metal_Slug {
 	 *
 	 * @since    1.0.0
 	 */
-	public function run() {
+	public function run()
+	{
 		$this->loader->run();
 	}
 
@@ -191,7 +205,8 @@ class Metal_Slug {
 	 * @since     1.0.0
 	 * @return    string    The name of the plugin.
 	 */
-	public function get_plugin_name() {
+	public function get_plugin_name()
+	{
 		return $this->plugin_name;
 	}
 
@@ -201,7 +216,8 @@ class Metal_Slug {
 	 * @since     1.0.0
 	 * @return    Metal_Slug_Loader    Orchestrates the hooks of the plugin.
 	 */
-	public function get_loader() {
+	public function get_loader()
+	{
 		return $this->loader;
 	}
 
@@ -211,8 +227,8 @@ class Metal_Slug {
 	 * @since     1.0.0
 	 * @return    string    The version number of the plugin.
 	 */
-	public function get_version() {
+	public function get_version()
+	{
 		return $this->version;
 	}
-
 }

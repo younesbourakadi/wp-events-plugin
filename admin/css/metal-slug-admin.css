@@ -2,3 +2,35 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+​ ​ .admin_title {
+    text-align: center;
+}
+
+​ .admin_content {
+    display: grid;
+    ​grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    ​gap: 16px;
+    height: 100%;
+}
+
+​ .admin_content-formEvent {
+    border: solid 1px BLACK;
+    border-radius: 10px;
+}
+
+​ .admin_content-addTitle {
+    text-align: center;
+}
+
+​ .admin_content-add {
+    margin: 16px;
+}
+
+​ .admin_content-modifyTitle {
+    text-align: center;
+}
+
+​ .admin_content-modify {
+    margin: 16px;
+}

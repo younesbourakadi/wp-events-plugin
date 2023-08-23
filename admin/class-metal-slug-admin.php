@@ -20,7 +20,8 @@
  * @subpackage Metal_Slug/admin
  * @author     JCVD <yolo@bisous.org>
  */
-class Metal_Slug_Admin {
+class Metal_Slug_Admin
+{
 
 	/**
 	 * The ID of this plugin.
@@ -47,19 +48,74 @@ class Metal_Slug_Admin {
 	 * @param      string    $plugin_name       The name of this plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version ) {
+	public function __construct($plugin_name, $version)
+	{
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-
 	}
+
+	public function add_admin_menu()
+	{
+		add_menu_page(
+			'Gestion des Événements',
+			'Événements',
+			'administrator',
+			'metal-slug-admin-page',
+			array($this, 'display_admin_page')
+		);
+	}
+
+	public function display_admin_page()
+	{
+		require_once(plugin_dir_path(__FILE__) . 'partials/metal-slug-admin-display.php');
+	}
+
+
+	public function register_settings()
+	{
+		register_setting('metal-slug-settings', 'metal_slug_event_title');
+		register_setting('metal-slug-settings', 'metal_slug_event_start_date');
+		register_setting('metal-slug-settings', 'metal_slug_event_end_date');
+	}
+
+
+
+	public function process_ajouter_evenement()
+	{
+
+		if (isset($_POST['titleEvent']) && isset($_POST['startEvent']) && isset($_POST['endEvent'])) {
+
+			// Récupérer les données du formulaire
+			$titleEvent = sanitize_text_field($_POST['titleEvent']);
+			$startEvent = sanitize_text_field($_POST['startEvent']);
+			$endEvent  = sanitize_text_field($_POST['endEvent']);
+
+			global $wpdb;
+			$table_name = $wpdb->prefix . 'metal_slug_events';
+			$data = array(
+				'event_title' => $titleEvent,
+				'start_date' => $startEvent,
+				'end_date' => $endEvent,
+
+			);
+			$wpdb->insert($table_name, $data);
+			var_dump($data);
+
+			// wp_redirect(admin_url('?page=metal-slug-admin-page'));
+			exit;
+		}
+	}
+
+
 
 	/**
 	 * Register the stylesheets for the admin area.
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles() {
+	public function enqueue_styles()
+	{
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -73,8 +129,7 @@ class Metal_Slug_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/metal-slug-admin.css', array(), $this->version, 'all' );
-
+		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/metal-slug-admin.css', array(), $this->version, 'all');
 	}
 
 	/**
@@ -82,7 +137,8 @@ class Metal_Slug_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_scripts() {
+	public function enqueue_scripts()
+	{
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -96,8 +152,6 @@ class Metal_Slug_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/metal-slug-admin.js', array( 'jquery' ), $this->version, false );
-
+		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/metal-slug-admin.js', array('jquery'), $this->version, false);
 	}
-
 }
