@@ -20,7 +20,8 @@
  * @subpackage Metal_Slug/public
  * @author     JCVD <yolo@bisous.org>
  */
-class Metal_Slug_Public {
+class Metal_Slug_Public
+{
 
 	/**
 	 * The ID of this plugin.
@@ -47,11 +48,11 @@ class Metal_Slug_Public {
 	 * @param      string    $plugin_name       The name of the plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version ) {
+	public function __construct($plugin_name, $version)
+	{
 
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-
 	}
 
 	/**
@@ -59,7 +60,8 @@ class Metal_Slug_Public {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles() {
+	public function enqueue_styles()
+	{
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -73,8 +75,7 @@ class Metal_Slug_Public {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/metal-slug-public.css', array(), $this->version, 'all' );
-
+		wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/metal-slug-public.css', array(), $this->version, 'all');
 	}
 
 	/**
@@ -82,7 +83,8 @@ class Metal_Slug_Public {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_scripts() {
+	public function enqueue_scripts()
+	{
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -96,8 +98,19 @@ class Metal_Slug_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/metal-slug-public.js', array( 'jquery' ), $this->version, false );
-
+		wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/metal-slug-public.js', array('jquery'), $this->version, false);
 	}
 
+
+	public function process_edit_event()
+	{
+		if (isset($_GET['action']) && $_GET['action'] === 'edit_event' && isset($_GET['event_id'])) {
+			$event_id = intval($_GET['event_id']);
+			// Fetch event data from the database using $event_id
+
+			// Load the public display template with the event data
+			include(plugin_dir_path(__FILE__) . 'partials/metal-slug-public-display.php');
+			exit; // Stop further execution
+		}
+	}
 }

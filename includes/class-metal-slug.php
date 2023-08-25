@@ -154,12 +154,10 @@ class Metal_Slug
 	 * @since    1.0.0
 	 * @access   private
 	 */
+
 	private function define_admin_hooks()
 	{
-
 		$plugin_admin = new Metal_Slug_Admin($this->get_plugin_name(), $this->get_version());
-		$this->loader->add_action('admin_init', $plugin_admin, 'process_ajouter_evenement');
-
 
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_styles');
 		$this->loader->add_action('admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts');
@@ -167,7 +165,10 @@ class Metal_Slug
 		$this->loader->add_action('admin_menu', $plugin_admin, 'add_admin_menu');
 		// $this->loader->add_action( 'admin_menu', $plugin_admin, 'ms_admin_display_setting_pages' );
 
-		$this->loader->add_action('admin_post_add_event', $plugin_admin, 'process_ajouter_evenement');
+
+		$this->loader->add_action('admin_post_add_event', $plugin_admin, 'process_add_event');
+		$this->loader->add_action('admin_post_update_event', $plugin_admin, 'process_update_event');
+		$this->loader->add_action('admin_init', $plugin_admin, 'process_edit_event');
 	}
 
 

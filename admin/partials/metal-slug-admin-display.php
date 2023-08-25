@@ -23,7 +23,7 @@
             <h2 class="admin_content-addTitle">Ajouter un évènement</h2>
 
             <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
-                <input type="hidden" name="action" value="ajouter_evenement">
+                <input type="hidden" name="action" value="add_event">
 
                 <div class="admin_content-add">
                     <label class="admin_content-addLabel" id="addName">Nom de l'évènement
