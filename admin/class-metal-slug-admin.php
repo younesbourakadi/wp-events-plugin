@@ -125,7 +125,7 @@ class Metal_Slug_Admin
 			$wpdb->insert($table_name, $data);
 			var_dump($data);
 
-			// wp_redirect(admin_url('?page=metal-slug-admin-page'));
+			wp_redirect(admin_url('?page=metal-slug-admin-page'));
 			exit;
 		}
 	}
@@ -183,6 +183,21 @@ class Metal_Slug_Admin
 
 			$where = array('id' => $event_id);
 			$wpdb->update($table_name, $data, $where);
+
+			wp_redirect(admin_url('?page=metal-slug-admin-page'));
+			exit;
+		}
+	}
+
+	public function process_delete_event()
+	{
+		if (isset($_POST['event_id']) && $_POST['action'] === 'supprimer_evenement') {
+			$event_id = intval($_POST['event_id']);
+
+			global $wpdb;
+			$table_name = $wpdb->prefix . 'metal_slug_events';
+			$where = array('id' => $event_id);
+			$wpdb->delete($table_name, $where);
 
 			wp_redirect(admin_url('?page=metal-slug-admin-page'));
 			exit;

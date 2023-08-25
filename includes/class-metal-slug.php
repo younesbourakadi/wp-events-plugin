@@ -169,6 +169,9 @@ class Metal_Slug
 		$this->loader->add_action('admin_post_add_event', $plugin_admin, 'process_add_event');
 		$this->loader->add_action('admin_post_update_event', $plugin_admin, 'process_update_event');
 		$this->loader->add_action('admin_init', $plugin_admin, 'process_edit_event');
+
+		$this->loader->add_action('admin_init', $plugin_admin, 'process_delete_event');
+		$this->loader->add_action('admin_post_update_event', $plugin_admin, 'process_delete_event');
 	}
 
 
@@ -187,6 +190,11 @@ class Metal_Slug
 
 		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_styles');
 		$this->loader->add_action('wp_enqueue_scripts', $plugin_public, 'enqueue_scripts');
+
+		$this->loader->add_action('the_content', $plugin_public, 'display_events_content');
+
+		$this->loader->add_action('the_content', $plugin_public, 'process_add_event_public');
+		$this->loader->add_action('the_content', $plugin_public, 'process_edit_event_public');
 	}
 
 	/**
